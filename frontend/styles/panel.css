@@ -1,0 +1,95 @@
+/* ── Glass trigger panel (CSS3D) ────────────────────────────────────── */
+.glass-panel {
+  width: 280px;
+  padding: 20px 24px;
+  background: oklch(15% 0.04 260 / 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 16px;
+  color: oklch(95% 0 0);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 8px 32px oklch(0% 0 0 / 0.5);
+  transition: background 200ms, box-shadow 200ms;
+  user-select: none;
+}
+.glass-panel:hover { background: oklch(20% 0.05 260 / 0.8); box-shadow: 0 12px 48px oklch(0% 0 0 / 0.6); }
+.glass-panel-icon { font-size: 2rem; margin-bottom: 8px; color: oklch(72% 0.2 210); }
+.glass-panel-text { font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
+.glass-panel-subtext { font-size: 0.78rem; color: oklch(65% 0 0); }
+
+/* ── Message input panel (CSS3D) ─────────────────────────────────────── */
+.message-input-panel {
+  width: 400px;
+  background: oklch(13% 0.03 260 / 0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid oklch(100% 0 0 / 0.1);
+  border-radius: 16px;
+  font-family: var(--font-sans);
+  color: oklch(95% 0 0);
+  box-shadow: 0 12px 48px oklch(0% 0 0 / 0.6);
+  display: none;
+}
+.message-input-panel.show { display: block; }
+
+.message-input-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid oklch(100% 0 0 / 0.07);
+}
+.message-input-panel-title { font-size: 0.9rem; font-weight: 600; color: oklch(72% 0.2 210); }
+.btn-close-panel { color: oklch(60% 0 0); font-size: 1rem; padding: 2px 6px; border-radius: 4px; transition: color 120ms; }
+.btn-close-panel:hover { color: oklch(95% 0 0); }
+
+.message-input-textarea {
+  width: 100%;
+  min-height: 80px;
+  max-height: 180px;
+  background: oklch(100% 0 0 / 0.05);
+  border: none;
+  border-bottom: 1px solid oklch(100% 0 0 / 0.07);
+  color: oklch(95% 0 0);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  padding: 12px 18px;
+  resize: none;
+  outline: none;
+}
+.message-input-textarea::placeholder { color: oklch(50% 0 0); }
+
+.message-input-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+}
+.btn-voice {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: oklch(100% 0 0 / 0.06);
+  border: 1px solid oklch(100% 0 0 / 0.1);
+  color: oklch(72% 0.2 210);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms;
+}
+.btn-voice:hover { background: oklch(100% 0 0 / 0.12); }
+.btn-voice.recording { background: oklch(55% 0.22 20 / 0.2); color: oklch(65% 0.22 20); animation: pulse-ring 1s ease infinite; }
+@keyframes pulse-ring { 0%,100% { box-shadow: 0 0 0 0 oklch(65% 0.22 20 / 0.4); } 50% { box-shadow: 0 0 0 6px oklch(65% 0.22 20 / 0); } }
+
+.recording-indicator { font-size: 0.75rem; color: oklch(65% 0.22 20); display: inline-flex; align-items: center; gap: 4px; }
+.recording-indicator i { animation: blink 1s step-start infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.btn-cancel { margin-left: auto; padding: 8px 14px; border-radius: 6px; font-size: 0.85rem; color: oklch(65% 0 0); transition: color 120ms; }
+.btn-cancel:hover { color: oklch(90% 0 0); }
+.btn-send { padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; }
+.btn-send.primary { background: var(--color-accent); color: #fff; transition: filter 120ms; }
+.btn-send.primary:hover { filter: brightness(1.15); }
