@@ -1,0 +1,37 @@
+:root {
+  --color-ink: oklch(20% 0.02 260);
+  --color-mist: oklch(98% 0.01 250);
+  --color-accent: oklch(68% 0.18 270);
+  --color-accent-soft: oklch(85% 0.08 270);
+  --color-danger: oklch(62% 0.21 25);
+
+  --glass-surface: oklch(98% 0.01 250 / 0.55);
+  --glass-border: oklch(100% 0 0 / 0.35);
+  --glass-shadow: 0 8px 32px oklch(20% 0.02 260 / 0.18);
+  --glass-blur: 18px;
+
+  --text-xs: clamp(0.75rem, 0.72rem + 0.15vw, 0.85rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  --text-lg: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+
+  --space-xs: 0.4rem;
+  --space-sm: 0.75rem;
+  --space-md: 1.25rem;
+  --space-lg: 2rem;
+
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 999px;
+
+  --duration-fast: 150ms;
+  --duration-normal: 280ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-surface {
+  background: var(--glass-surface);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}

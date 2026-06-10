@@ -1,10 +1,35 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: vmate
+      POSTGRES_PASSWORD: vmate
+      POSTGRES_DB: vmate
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vmate"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   app:
     build: .
     ports:
-      - "5000:5000"
+      - "8080:8080"
     env_file:
       - .env
+    environment:
+      DATABASE_URL: postgres://vmate:vmate@postgres:5432/vmate
+    depends_on:
+      postgres:
+        condition: service_healthy
     volumes:
       - ./data:/app/data
     restart: unless-stopped
+
+volumes:
+  pgdata:
