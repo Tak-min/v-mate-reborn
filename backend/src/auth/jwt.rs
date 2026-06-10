@@ -70,6 +70,46 @@ pub fn issue_refresh(secret: &str, user_id: Uuid, days: i64) -> IssuedRefresh {
     IssuedRefresh { token, token_hash, expires_at }
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct OauthStateClaims {
+    purpose: String,
+    exp: i64,
+    iat: i64,
+}
+
+const OAUTH_STATE_PURPOSE: &str = "oauth_state";
+const OAUTH_STATE_MINUTES: i64 = 10;
+
+/// Issues a short-lived signed token used as the OAuth `state` parameter,
+/// so the callback can verify the request originated from this server
+/// (CSRF protection) without needing server-side session storage.
+pub fn issue_oauth_state(secret: &str) -> String {
+    let now = Utc::now();
+    let claims = OauthStateClaims {
+        purpose: OAUTH_STATE_PURPOSE.to_string(),
+        iat: now.timestamp(),
+        exp: (now + Duration::minutes(OAUTH_STATE_MINUTES)).timestamp(),
+    };
+    encode(&Header::default(), &claims, &EncodingKey::from_secret(secret.as_bytes()))
+        .expect("jwt encoding should not fail")
+}
+
+/// Verifies an OAuth `state` parameter issued by [`issue_oauth_state`].
+pub fn verify_oauth_state(secret: &str, token: &str) -> AppResult<()> {
+    let data = decode::<OauthStateClaims>(
+        token,
+        &DecodingKey::from_secret(secret.as_bytes()),
+        &Validation::default(),
+    )
+    .map_err(|_| AppError::Unauthorized)?;
+
+    if data.claims.purpose != OAUTH_STATE_PURPOSE {
+        return Err(AppError::Unauthorized);
+    }
+
+    Ok(())
+}
+
 pub fn hash_token(token: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(token.as_bytes());

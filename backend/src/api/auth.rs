@@ -153,7 +153,7 @@ async fn me(State(state): State<AppState>, user: AuthUser) -> AppResult<Json<Use
 }
 
 async fn google_redirect(State(state): State<AppState>) -> impl IntoResponse {
-    let state_token = Uuid::new_v4().to_string();
+    let state_token = jwt::issue_oauth_state(&state.config.jwt_secret);
     let url = oauth::authorize_url(&state.config, &state_token);
     Redirect::temporary(&url)
 }
@@ -161,12 +161,15 @@ async fn google_redirect(State(state): State<AppState>) -> impl IntoResponse {
 #[derive(Deserialize)]
 struct GoogleCallbackParams {
     code: String,
+    state: String,
 }
 
 async fn google_callback(
     State(state): State<AppState>,
     Query(params): Query<GoogleCallbackParams>,
 ) -> AppResult<impl IntoResponse> {
+    jwt::verify_oauth_state(&state.config.jwt_secret, &params.state)?;
+
     let info = oauth::exchange_code(&state.http, &state.config, &params.code).await?;
 
     let existing: Option<(Uuid,)> = sqlx::query_as(
