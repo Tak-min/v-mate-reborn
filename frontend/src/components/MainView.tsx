@@ -56,8 +56,8 @@ export function MainView() {
     socket.connect();
     useSocketStore.getState().setSocket(socket);
 
-    apiFetch<Character[]>('/api/characters')
-      .then((characters) => {
+    apiFetch<{ characters: Character[] }>('/api/characters')
+      .then(({ characters }) => {
         setCharacters(characters);
         if (characters.length > 0) setCurrentCharacter(characters[0]);
       })
